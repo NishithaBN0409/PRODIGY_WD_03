@@ -1,0 +1,196 @@
+/* Custom Fonts */
+body {
+    font-family: 'Orbitron', sans-serif;
+    touch-action: manipulation; /* Prevents double-tap zoom on mobile */
+}
+
+/* Starfield Background Animation */
+.star-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: 150px 150px; /* Smaller stars */
+    animation: move-background 50s linear infinite;
+}
+
+.layer:nth-child(1) {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="3" height="3"><circle cx="1.5" cy="1.5" r="0.5" fill="%23ffffff" /></svg>');
+    animation-duration: 50s;
+    opacity: 0.8;
+}
+
+.layer:nth-child(2) {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><circle cx="2" cy="2" r="0.7" fill="%23e0e0e0" /></svg>');
+    animation-duration: 70s;
+    opacity: 0.6;
+    background-position: 50% 50%;
+}
+
+.layer:nth-child(3) {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><circle cx="2.5" cy="2.5" r="0.9" fill="%23c0c0c0" /></svg>');
+    animation-duration: 90s;
+    opacity: 0.4;
+    background-position: 25% 25%;
+}
+
+@keyframes move-background {
+    from { transform: translateY(0); }
+    to { transform: translateY(-100%); }
+}
+
+
+/* Game Buttons */
+.game-button {
+    @apply px-8 py-4 font-bold rounded-full shadow-lg transition-all duration-300 ease-in-out relative overflow-hidden;
+    @apply hover:shadow-xl hover:scale-105;
+    @apply focus:outline-none focus:ring-4;
+    background-image: linear-gradient(45deg, var(--tw-gradient-stops));
+    border: 2px solid transparent;
+    animation: pulse-button 2s infinite alternate;
+}
+
+.game-button .button-text {
+    @apply relative z-10 text-white;
+    font-family: 'Press Start 2P', cursive; /* Retro arcade font */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.game-button::before {
+    content: '';
+    @apply absolute inset-0 bg-white opacity-0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.game-button:hover::before {
+    @apply opacity-20;
+}
+
+@keyframes pulse-button {
+    0% { transform: scale(1); box-shadow: 0 0 10px rgba(139, 92, 246, 0.7); }
+    100% { transform: scale(1.02); box-shadow: 0 0 20px rgba(236, 72, 153, 0.9); }
+}
+
+
+/* Game Board Cells */
+.cell {
+    width: 120px; /* Slightly larger cells */
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4.5rem; /* Larger font for X/O */
+    font-weight: bold;
+    cursor: pointer;
+    background-color: rgba(30, 41, 59, 0.7); /* Darker slate with opacity */
+    border: 3px solid rgba(129, 140, 248, 0.5); /* Lighter purple border */
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-out, box-shadow 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.cell:hover {
+    background-color: rgba(51, 65, 85, 0.8); /* Darker on hover */
+    transform: scale(1.05); /* Slight pop effect */
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.7); /* Purple glow on hover */
+}
+
+/* Specific borders to create the grid effect */
+.cell:not(:nth-child(3n)) {
+    border-right-width: 3px;
+}
+.cell:not(:nth-last-child(-n+3)) {
+    border-bottom-width: 3px;
+}
+
+/* Styling for X and O markers */
+.cell.x {
+    color: #4ade80; /* Neon Green */
+    text-shadow: 0 0 10px #4ade80, 0 0 20px #4ade80;
+    animation: neon-flicker 1.5s infinite alternate;
+}
+.cell.o {
+    color: #facc15; /* Cosmic Yellow */
+    text-shadow: 0 0 10px #facc15, 0 0 20px #facc15;
+    animation: neon-flicker 1.5s infinite alternate;
+}
+
+/* Winning cell animation */
+.cell.win {
+    animation: win-glow 1s ease-in-out forwards;
+    background-color: #ef4444; /* Red for emphasis */
+    color: white;
+    text-shadow: 0 0 15px white, 0 0 25px white;
+}
+
+@keyframes win-glow {
+    0% { transform: scale(1); background-color: rgba(239, 68, 68, 0.7); box-shadow: 0 0 20px rgba(239, 68, 68, 0.9); }
+    50% { transform: scale(1.15); background-color: rgba(239, 68, 68, 1); box-shadow: 0 0 40px rgba(239, 68, 68, 1); }
+    100% { transform: scale(1); background-color: rgba(239, 68, 68, 0.7); box-shadow: 0 0 20px rgba(239, 68, 68, 0.9); }
+}
+
+@keyframes neon-flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+@keyframes animate-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+@keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Responsive sizing for the game board */
+@media (max-width: 768px) {
+    .cell {
+        width: 90px;
+        height: 90px;
+        font-size: 3.5rem;
+    }
+    .game-button {
+        padding: 12px 24px;
+        font-size: 0.9rem;
+    }
+    .game-button .button-text {
+        font-size: 0.9rem;
+    }
+    h1 {
+        font-size: 3rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cell {
+        width: 70px;
+        height: 70px;
+        font-size: 2.8rem;
+    }
+    .game-button {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+    }
+    .game-button .button-text {
+        font-size: 0.8rem;
+    }
+    h1 {
+        font-size: 2.5rem;
+    }
+    h2 {
+        font-size: 1.2rem;
+    }
+}
